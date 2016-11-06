@@ -21,7 +21,7 @@ from pymongo import MongoClient
 
 
 client = MongoClient()
-nba_db = client['NBA']
+pos_db = client['NBA']
 pbp_db = client['PBP']
 
 
@@ -160,5 +160,4 @@ pbp_db = client['PBP']
 
 # PrettyPrint syntax
 pp = pprint.PrettyPrinter(indent=4)
-pp.pprint(document)
-
+pp.pprint("xyz")
