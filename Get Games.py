@@ -36,8 +36,9 @@ fixed_links = []
 # Add ONLY THE FIXED LINKS to the fixed_links list
 for link in links:
     if '.7z' in link:
-        fixed_link = 'https://github.com' + link.replace('/blob/', '/raw/')
-        fixed_links.append(fixed_link)
+        if 'SAS' in link:
+            fixed_link = 'https://github.com' + link.replace('/blob/', '/raw/')
+            fixed_links.append(fixed_link)
 
 # Loop through the list of game archive links, request each one for download
 # Save each file using the filename (basename) with which it's stored on the server
