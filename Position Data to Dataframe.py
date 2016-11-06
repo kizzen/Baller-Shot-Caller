@@ -21,9 +21,10 @@ import os
 ##########################################################################
 
 client = MongoClient()
-pos_db = client['NBA']
-pbp_db = client['PBP']
+pos_db = client['SportVU']
+pbp_db = client['mydb']
 os.chdir("C:\\Users\\577731\\Desktop\\nba-tracking\\")
+pbp_CSV_path = '.\exports\pbp_SAS.csv'
 
 ##########################################################################
 ## Functions
@@ -110,18 +111,18 @@ def event_to_df(event, event_id, game_date, game_id):
 	
 #return only SAS game_IDs and SAS shots 
 def pbp_SAS_dataframe(pbp_CSV_path, game_id):
-	pbp_df = pd.DataFrame.from_csv(pbp_CSV_path, header = 1)
+	pbp_df = pd.DataFrame.from_csv(pbp_CSV_path)
 	
-	# eventsMSGtype defines shots subset only byu these shots.
-	pbp_df = pbp_df[ ((pbp_df.EVENTMSGTYPE==2]) | (pbp_df.EVENTMSGTYPE==1])) & (pbp_df.PLAYER1_TEAM_ABBREVIATION=='SAS')&((pbp_df.GAME_ID==game_id))]
+	# eventsMSGtype defines shots subset only by these shots.
+	pbp_df2 = pbp_df[((pbp_df.EVENTMSGTYPE==2) | (pbp_df.EVENTMSGTYPE==1)) & (pbp_df.PLAYER1_TEAM_ABBREVIATION=='SAS')&(pbp_df.GAME_ID==game_id)]
 	
-	df1 = pbp_df['GAME_ID','EVENT_NUM']
+	df1 = pbp_df2[['GAME_ID','EVENTNUM']]
 	
 	uniqueevents = np.array(df1.GAME_ID.unique()).tolist()
 	
 	return uniqueevents
 
-	
+        
 	
 # Work through all games
 def dataframes_work(pos_db):
