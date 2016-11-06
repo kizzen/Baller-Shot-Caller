@@ -16,16 +16,16 @@ import pprint
 import pandas as pd
 import numpy as np
 from pymongo import MongoClient
+import os
 
 ##########################################################################
 ## Module Variables/Constants
 ##########################################################################
 
-
 client = MongoClient()
 nba_db = client['NBA']
 pbp_db = client['PBP']
-
+os.chdir("C:\\Users\\577731\\Desktop\\nba-tracking\\")
 
 ##########################################################################
 ## Functions
@@ -89,14 +89,28 @@ def event_to_df(event):
     df["player_jersey"] = df.player_id.map(lambda x: id_dict[x][1])
 
     return df
+	
+#return only SAS game_IDs and SAS shots 
+def pbp_SAS_dataframe(pbp_CSV_path, game_id):
+	pbp_df = pd.DataFrame.from_csv(pbp_CSV_path, header = 1)
+	
+	# eventsMSGtype defines shots subset only byu these shots.
+	pbp_df = pbp_df[ ((pbp_df.EVENTMSGTYPE==2]) | (pbp_df.EVENTMSGTYPE==1])) & (pbp_df.PLAYER1_TEAM_ABBREVIATION=='SAS')&((pbp_df.GAME_ID==game_id))]
+	
+	df1 = pbp_df['GAME_ID','EVENT_NUM']
+	
+	uniqueevents = np.array(df1.GAME_ID.unique()).tolist()
+	
+	return uniqueevents
 
-
+	
+	
 # Work through all games
 def dataframes_work(nba_db):
 
     # Gather list of game IDs
     game_ids = nba_db.collection_names()
-
+	
     # Loop through game IDs and do stuff
     for game_id in game_ids:
 
@@ -105,10 +119,11 @@ def dataframes_work(nba_db):
         # Get vital stats
         game_date = coll.find_one()['game_date']
         game_id = coll.find_one()['game_id']
-
+		
         # Make a list of event IDs
-        event_ids = coll.distinct('eventId')
-
+        # event_ids = coll.distinct('eventId')
+		event_ids = pbp_SAS_dataframe(pbp_CSV_path, game_id)
+		
         # Get a single event
         for event_id in event_ids:
             cursor = coll.find({'eventId': event_id})
