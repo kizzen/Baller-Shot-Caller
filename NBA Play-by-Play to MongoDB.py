@@ -29,10 +29,10 @@ team_abbr = 'SAS'
 ## Functions
 ##########################################################################
 
-
+'''
 def printJSON(your_json):
     print(json.dumps(your_json, indent=4, sort_keys=True))
-
+'''
 
 # Get list of game IDs for single team
 def get_games_list(team_abbr):
@@ -91,6 +91,7 @@ playbyplay_to_mongo(game_id_list, pbp_db)
 
 # The following is scratch code used in development. It is not used in the actual execution.
 
+'''
 game_id = game_id_list[0]
 game_pbp = pbp_db[game_id]
 cursor = game_pbp.find({})
@@ -101,3 +102,5 @@ for document in cursor:
 # PrettyPrint syntax
 pp = pprint.PrettyPrinter(indent=4)
 pp.pprint(document)
+
+'''
