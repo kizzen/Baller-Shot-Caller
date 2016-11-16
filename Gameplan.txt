@@ -1,0 +1,12 @@
+Workflow
+
+1.) Merge all x,y readings into instances.
+        game, play number || Who Took Shot || player || x, y 
+        Long to wide.
+        Fit to numpy
+        
+1a  Numpy Array,  https://www.kaggle.com/c/titanic/forums/t/5379/handling-categorical-data-with-sklearn
+2.) hierarchical clustering.
+        Output is player specific 
+3.) Create table  
+        game, play number || Who Took Shot || Path for Duncan || Path for Ginobili  ... || Path for Parker
