@@ -8,7 +8,6 @@
 ##########################################################################
 ## Imports
 ##########################################################################
-
 import json
 import pprint
 import pandas as pd
@@ -17,19 +16,51 @@ from pymongo import MongoClient
 import os
 import glob
 
-
 ##########################################################################
-## Imports
+## Initial file parameter setup and initialization.
 ##########################################################################
 
-mydir = "C:\\Users\\577731\\Desktop\\nba-tracking"
+#Remember to unpack all the .csv files into the data folder of nba_tracking
+
+mydir = "C:\\Users\\Josh\\Documents\\nba-tracking" #Make sure to change to your directory
 os.chdir(mydir)
 
-#Find list of data frames, and then prune that list.
-filenames = glob.glob(mydir + "\\*.csv")
+#Find list of csvs, the 41 spurs games, to be converted to dataframe and manipulated at a later step.
 
-#CSVs are imported into a merged dataframe, 
-def csv_to_pruned_dataframe(filenames):
+filenames = glob.glob(mydir + "\\data\\*.csv")
+
+        
+
+##########################################################################
+## Execution
+##########################################################################    
+    
+#As we ingest our dataframes it would be helpful to reduce dimensions to \
+#a set number of obs per instance
+#Does pivot work for nulls?
+    
+           
+def subsample(df):
+    #drop off other things?
+    
+    #Creates a Group by object (which includes an index separated into groups that restart once a new group begins, enabling aggregate functions)
+    g = df.groupby(['event_id', 'PlayerName'])
+    #first filter step, reduce dimensions by 8 as we have 25 obs per second per player!
+    g = df[g.cumcount()%8==0].groupby(['event_id', 'PlayerName'])
+                 #is there someway to do this comparison within the g object?
+                 #cumulative count returns a dataframe instead of an indexed \
+                 #object, so its difficult to do the divide by 8 filtering in that step
+                  
+    
+    #Reduce dimensions in filter step 2, only taking 30 obs per player per play
+    df_filter = g.tail(30)
+    #need to great another g index for the cumulative count per group
+    g = df_filter.groupby(['event_id', 'PlayerName'])
+    df_filter['obs_in_event'] = (30-g.cumcount())
+
+#Primary execution function utilized to iterate through the list of filenames and concatenate the multiple dataframes into
+#some concatenated dataframe
+def pivoted_dataframe(filename):
     headers = ["index", "team_id", "player_id", "x_loc", "y_loc", "radius", "moment",
                "game_clock", "shot_clock", "event_id", "game_date", "game_id", "PlayerName"]
     list_ = []
@@ -37,15 +68,14 @@ def csv_to_pruned_dataframe(filenames):
         df = pd.read_csv(filename,index_col=None, header=0, names=headers)
         #calling our subsample
         sub_df = subsample(df)
-        sub_df.pivot(index='patient', columns='obs', values='score')
-        list_.append(sub_df)
-    frame = pd.concat(list_)
         
-
-##########################################################################
-## Execution
-##########################################################################        
-
+        #pivoting twice to generate wide format for all players in once instance
+        pivot1 = sub_df.pivot(index='patient', columns='obs', values='score').pivot()
+        list_.append(pivot2)
+        
+    frame = pd.concat(list_) #  +! Pickle the dataframe as an output, or simply reoutput as csv?
+    return frame
+    # Reoutput for csv involves: mkdir within data called 'instance_pivot'
 
 ##########################################################################
 ## Scrap
@@ -57,27 +87,7 @@ def csv_to_pruned_dataframe(filenames):
 # http://stackoverflow.com/questions/11786157/if-list-index-exists-do-x
 
 
-def subsample(df):
-    #drop off other things?
-    
-    #Creates a Group by object (which includes an index separated into groups that restart once a new group begins, enabling aggregate functions)
-    g = df.groupby(['EVENTNUM', 'player_id'])
-    
-    g = g[g.cumcount()%5==0] #g[] vs df[]? 
-    
-    #Reduce dimensions.
-    g = g.tail(100).reset_index(drop=True)
-    
-    #Backwards index for pivot?
-        g = g.nth(5)
-    #need to fi the type of error
-    except:
-        pass
-    
-
-    result = df.sort(['A', 'B'], ascending=[0, 0, 0, 0])
-    
-
+"""
 ### Grab every nth item 10x times (if available)
 GroupBy.count() 	Compute count of group, excluding missing values
 GroupBy.cumcount([ascending]) 	Number each item in each group from 0 to the length of that group - 1.
@@ -89,5 +99,25 @@ GroupBy.mean(\*args, \*\*kwargs) 	Compute mean of groups, excluding missing valu
 GroupBy.median() 	Compute median of groups, excluding missing values
 GroupBy.min() 	Compute min of group values
 GroupBy.nth(n[, dropna]) 	Take the nth row from each group if n is an int, or a subset of rows if n is a list of ints.
+"""
 
 
+#remove later, just to test def subsample
+
+headers = ["index", "team_id", "player_id", "x_loc", "y_loc", "radius", "moment", \
+           "game_clock", "shot_clock", "event_id", "game_date", "game_id", "PlayerName"]
+df = pd.read_csv(filenames[0], names=headers)
+
+g = df.groupby(['event_id', 'PlayerName'])
+#first filter step, reduce dimensions by 8 as we have 25 obs per second per player!
+g = df[g.cumcount()%8==0].groupby(['event_id', 'PlayerName'])
+              #g[] vs df[]? 
+              
+
+#Reduce dimensions in filter step 2, only taking 30 obs per player per play
+df_filter = g.tail(30)
+#need to great another g index for the cumulative count per group
+g = df_filter.groupby(['event_id', 'PlayerName'])
+df_filter['obs_in_event'] = (30-g.cumcount()) #?! Fix this shit
+#Backwards index for pivot?
+df.filter.head() #ix to print?    
