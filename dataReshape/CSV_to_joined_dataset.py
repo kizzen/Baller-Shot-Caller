@@ -40,6 +40,9 @@ filenames = glob.glob(mydir + "\\data\\*.csv")
 def subsample(df):
     #drop off other things?
     
+    #Samples ONLY san antonio spurs by their teams.
+    df = df[df["team_id"]==1610612759]
+    
     #Creates a Group by object (which includes an index separated into groups that restart once a new group begins, enabling aggregate functions)
     g = df.groupby(['event_id', 'PlayerName'])
     
@@ -49,7 +52,8 @@ def subsample(df):
                  #cumulative count returns a dataframe instead of an indexed object, so its difficult to do the divide by 8 filtering in that step
                   
     #Reduce dimensions in filter step 2, only taking 30 obs per player per play
-    df_filter = g.tail(30)
+    df_filter = g.tail(30) #with 3 observations per second we have 10 seconds of play per instance
+    
     #need to great another g index for the cumulative count per group
     g = df_filter.groupby(['event_id', 'PlayerName'])
     df_filter['obs_in_event'] = (30-g.cumcount())
@@ -73,20 +77,53 @@ def pivoted_dataframe(filename):
         #pivoting twice to generate wide format for all players in once instance
         pivot1 = df_filter.pivot_table(index=['game_id', 'event_id', 'PlayerName'], columns='obs_in_event') #datatype issue for pivot?
         pivot1.reset_index(inplace=True)  
+        
+        #Filter out values that have less than 10 seconds of play
+        pivot1 = pivot1[pd.isnull(pivot1[('y_loc', 1)])]
+        
         pivot2 = pivot1.pivot_table(index=['game_id', 'event_id'], columns='PlayerName')
         pivot2.reset_index(inplace=True)  
         list_.append(pivot2)
         
     frame = pd.concat(list_)
-    frame.to_csv('MainFrame_SportVU.csv', index=False)#  +! Pickle the dataframe as an output, or simply reoutput as csv?
-    #return frame
+    print('done concatenating')
+    frame.to_csv('MainFrame_SportVU2.csv', index=False) #  +! Pickle the dataframe as an output, or simply reoutput as csv?
+    
+    return frame
     # Reoutput for csv involves: mkdir within data called 'instance_pivot'
+    
+
+    
 ##########################################################################
 ## Execute
 ##########################################################################    
-pivoted_dataframe(filenames) #multiindex filename performance?
+pivoted_df = pivoted_dataframe(filenames) #multiindex filename performance?
 
-    
+
+
+##########################################################################
+## Merging Steps
+##########################################################################      
+
+#
+
+#   1. Merge with PlayByPlay data by Gameid, Eventid, for outcomes.
+fn = os.path.join(os.getcwd(), 'exports', 'pbp_SAS.csv') #play by play path
+
+#Read in our PbP_df
+PbP_df = pd.read_csv(fn)
+PbP_df.columns.values
+
+PbP_df = pd.read_csv(fn)
+
+merged_df = pd.merge(pivoted_df, PbP_df, how='left', on=['key1', 'key2'])    
+
+#Modify motion columns to add same 'distant value' to all missing columns so that the algorithm recognizes when people are on the bench, separate from actual data.
+
+#Export to CSV.
+
+
+
 ##########################################################################
 ## Scrap
 ##########################################################################        
@@ -117,6 +154,7 @@ GroupBy.nth(n[, dropna]) 	Take the nth row from each group if n is an int, or a 
 headers = ["index", "team_id", "player_id", "x_loc", "y_loc", "radius", "moment", \
            "game_clock", "shot_clock", "event_id", "game_date", "game_id", "PlayerName"]
 df = pd.read_csv(filenames[0], names=headers)
+df = df[df["team_id"]== 1610612759]
 
 g = df.groupby(['event_id', 'PlayerName'])
 #first filter step, reduce dimensions by 8 as we have 25 obs per second per player!
@@ -137,3 +175,5 @@ pivot1 = df_filter.pivot_table(index=['PlayerName','event_id'], columns='obs_in_
 pivot2 = pivot1
 pivot2.reset_index(inplace=True)  
 pivot2.to_csv('frametest.csv', index=False)
+pd.isnull(pivot2[('y_loc', 2)]).value_counts() #tests counts of procedure. should have some nulls
+
