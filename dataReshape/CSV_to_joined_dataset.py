@@ -26,7 +26,7 @@ os.chdir(mydir)
 #Find list of csvs, the 41 spurs games, to be converted to dataframe and manipulated at a later step.
 
 filenames = glob.glob(mydir + "\\data\\*.csv")
-
+pbp_CSV_path = '.\\exports\\pbp_SAS.csv'
         
 
 ##########################################################################
@@ -78,8 +78,8 @@ def pivoted_dataframe(filename):
         pivot1 = df_filter.pivot_table(index=['game_id', 'event_id', 'PlayerName'], columns='obs_in_event') #datatype issue for pivot?
         pivot1.reset_index(inplace=True)  
         
-        #Filter out values that have less than 10 seconds of play
-        pivot1 = pivot1[pd.isnull(pivot1[('y_loc', 1)])]
+        #?Filter out values that have less than 10 seconds of play, I want to keep NOT null. how do you set an index for omitting rather than keeping with pandas?
+        pivot1 = pivot1[-pd.isnull(pivot1[('y_loc', 1)])]
         
         pivot2 = pivot1.pivot_table(index=['game_id', 'event_id'], columns='PlayerName')
         pivot2.reset_index(inplace=True)  
@@ -89,35 +89,42 @@ def pivoted_dataframe(filename):
     print('done concatenating')
     frame.to_csv('MainFrame_SportVU2.csv', index=False) #  +! Pickle the dataframe as an output, or simply reoutput as csv?
     
+    #??? Impute null values?
+    
     return frame
     # Reoutput for csv involves: mkdir within data called 'instance_pivot'
-    
+
 
     
 ##########################################################################
-## Execute
+## Execute and merging steps
 ##########################################################################    
 pivoted_df = pivoted_dataframe(filenames) #multiindex filename performance?
 
-
-
-##########################################################################
-## Merging Steps
-##########################################################################      
-
-#
 
 #   1. Merge with PlayByPlay data by Gameid, Eventid, for outcomes.
 fn = os.path.join(os.getcwd(), 'exports', 'pbp_SAS.csv') #play by play path
 
 #Read in our PbP_df
-PbP_df = pd.read_csv(fn)
-PbP_df.columns.values
+pbp_df = pd.DataFrame.from_csv(pbp_CSV_path)
+pbp_df.columns.values
 
-PbP_df = pd.read_csv(fn)
+pbp_df = pbp_df[((pbp_df.EVENTMSGTYPE==2) | (pbp_df.EVENTMSGTYPE==1)) & \
+                 (pbp_df.PLAYER1_TEAM_ABBREVIATION=='SAS')]
 
-merged_df = pd.merge(pivoted_df, PbP_df, how='left', on=['key1', 'key2'])    
+#How to merge on keys that have different names, or even formats (lol tuple)
+merged_df = pd.merge(pbp_df, pivoted_df, how='left', left_on=['GAME_ID', 'EVENTNUM'], \
+                     right_on=[('event_id', '', ''), ('game_id', '', '')])
+merged_df2 = pd.merge(pbp_df, pivoted_df, how='left', left_on=['GAME_ID', 'EVENTNUM'], \
+                      right_on=[('event_id', '', ''), ('game_id', '', '')])
 
+merged_df[('y_loc', 1, 'Tony Parker')].count()
+
+#Iterate through x_loc, y_loc class and impute null values
+    #Find all columns that contain xloc or yloc
+    #Change value to some value outside of normal space
+    
+merged_df2.to_csv('MainFrame_SportVU2.csv', index=False)
 #Modify motion columns to add same 'distant value' to all missing columns so that the algorithm recognizes when people are on the bench, separate from actual data.
 
 #Export to CSV.
@@ -157,23 +164,33 @@ df = pd.read_csv(filenames[0], names=headers)
 df = df[df["team_id"]== 1610612759]
 
 g = df.groupby(['event_id', 'PlayerName'])
-#first filter step, reduce dimensions by 8 as we have 25 obs per second per player!
-g = df[g.cumcount()%8==0].groupby(['event_id', 'PlayerName'])
-              #g[] vs df[]? 
-              
 
+#first filter step, reduce dimensions by 8, dropping observations from 25 to 3 a second.
+abba = df[g.cumcount()%8==0] #.groupby(['event_id', 'PlayerName'])
+         #is there someway to do this comparison within the g object?
+         #cumulative count returns a dataframe instead of an indexed object, so its difficult to do the divide by 8 filtering in that step
+          
 #Reduce dimensions in filter step 2, only taking 30 obs per player per play
 df_filter = g.tail(30)
-#need to great another g index for the cumulative count per group
-g = df_filter.groupby(['event_id', 'PlayerName'])
-df_filter['obs_in_event'] = (30-g.cumcount()) #?! Fix this shit
-#Backwards index for pivot?
-df_filter.head(100) #ix to print?    
-df_filter.columns.values
-df_filter = df_filter[['PlayerName', 'x_loc', 'y_loc', 'shot_clock', 'event_id', 'obs_in_event']]
-pivot1 = df_filter.pivot_table(index=['PlayerName','event_id'], columns='obs_in_event')
-pivot2 = pivot1
+
+test_df = subsample(df)
+test_df.head(100) #ix to print?    
+test_df.columns.values
+
+pivot1 = test_df.pivot_table(index=['game_id', 'event_id', 'PlayerName'], columns='obs_in_event') #datatype issue for pivot?
+pivot1.reset_index(inplace=True)  
+
+#Filter out values that have less than 10 seconds of play
+pivota = pivot1[-pd.isnull(pivot1[('y_loc', 1)])]
+
+pivot2 = pivota.pivot_table(index=['game_id', 'event_id'], columns='PlayerName')
 pivot2.reset_index(inplace=True)  
-pivot2.to_csv('frametest.csv', index=False)
+list_.append(pivot2)
+
+
+frame = pd.concat(list_)
+print('done concatenating')
+frame.to_csv('MainFrame_SportVU2.csv', index=False)
+
 pd.isnull(pivot2[('y_loc', 2)]).value_counts() #tests counts of procedure. should have some nulls
 
