@@ -9,7 +9,6 @@
 
 
 from nba_py.constants import TEAMS
-from nba_py import game
 from nba_py import team
 from nba_py import player
 import pandas as pd
@@ -36,6 +35,42 @@ all_teams_list = list(TEAMS.keys())
 ##########################################################################
 ## Functions
 ##########################################################################
+
+
+def get_player_attributes(all_teams_list):
+
+    player_ids = []
+
+    for team_abbr in all_teams_list:
+
+        current_team = TEAMS[team_abbr]
+        players_json = team.TeamPlayers(team_id=current_team['id']).json
+        player_data_list = players_json['resultSets'][1]
+        for player_data in player_data_list['rowSet']:
+
+            player_id = player_data[1]
+            player_ids.append(player_id)
+
+    player_summary_list = []
+
+    for player_id in player_ids:
+
+        player_summary_json = player.PlayerSummary(player_id).json
+        player_info = player_summary_json['resultSets'][0]
+
+        player_headers = player_info['headers']
+        player_stats = player_info['rowSet'][0]
+
+        player_summary_dict = dict(zip(player_headers, player_stats))
+        player_summary_list.append(player_summary_dict)
+
+        print("Gathered data for {}".format(player_stats[3]))
+
+    df = pd.DataFrame(player_summary_list)
+
+    df = df[player_headers]
+
+    df.to_excel('2016-17 NBA Player Attributes.xlsx')
 
 
 def get_team_players(all_teams_list):
@@ -102,6 +137,8 @@ def get_team_stats(all_teams_list):
 get_team_players(all_teams_list)
 
 get_team_stats(all_teams_list)
+
+get_player_attributes(all_teams_list)
 
 
 ##########################################################################
