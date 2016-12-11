@@ -33,8 +33,10 @@ import pickle
 import os
 import sklearn
 
+from sklearn.metrics import accuracy_score
 from sklearn.datasets import load_boston
-#from sklearn.ensemble import RandomForestRegressor
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.ensemble import RandomForestClassifier
 from sklearn import svm
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import Imputer
@@ -61,6 +63,7 @@ testlist = ['PLAYER1_ID', 'PERSON3TYPE']
 broketest = df[testlist]
 
 outcomes = df['PLAYER1_ID']
+outcomes = outcomes.astype('category')
 
 
 #need to identify tuples for our columns.
@@ -76,29 +79,70 @@ len(colnames_pred)
 predictors = df[colnames_pred]
 type(predictors)
 
-for i in colnames_pred:
-    predictors = df[i].fillna(-100, inplace= True)
+for i in predictors:
+    predictors[i].fillna(-100, inplace= True)
 
+type(predictors)
+    
+#==============================================================================
+# Model fitting part 2?
+#==============================================================================
+
+#==============================================================================
+# # fit the model
+# clf = svm.NuSVC()
+# clf.fit(predictors, outcomes)
+# 
+# # plot the decision function for each datapoint on the grid
+# Z = clf.decision_function(np.c_[xx.ravel(), yy.ravel()])
+# Z = Z.reshape(xx.shape)
+# 
+# plt.imshow(Z, interpolation='nearest',
+#            extent=(xx.min(), xx.max(), yy.min(), yy.max()), aspect='auto',
+#            origin='lower', cmap=plt.cm.PuOr_r)
+# contours = plt.contour(xx, yy, Z, levels=[0], linewidths=2,
+#                        linetypes='--')
+# plt.scatter(X[:, 0], X[:, 1], s=30, c=Y, cmap=plt.cm.Paired)
+# plt.xticks(())
+# plt.yticks(())
+# plt.axis([-3, 3, -3, 3])
+# plt.show()
+#==============================================================================
+    
+    
 #==============================================================================
 # Model Fitting parameters
 #==============================================================================
+print("Fitting the classifier to the training set")
+t0 = time()
+param_grid = {'C': [1e3, 5e3, 1e4, 5e4, 1e5],
+              'gamma': [0.0001, 0.0005, 0.001, 0.005, 0.01, 0.1], }
+clf = GridSearchCV(SVC(kernel='rbf', class_weight='balanced'), param_grid)
+clf = clf.fit(X_train_pca, y_train)
+print("done in %0.3fs" % (time() - t0))
+print("Best estimator found by grid search:")
+print(clf.best_estimator_)
 
 
-# Estimate the score without the lines containing missing values
-estimator = RandomForestRegressor(random_state=0, n_estimators=100)
-score = cross_val_score(estimator, X_filtered, y_filtered).mean()
-print("Score without the samples containing missing values = %.2f" % score)
 
-# Estimate the score after imputation of the missing values
-X_missing = X_full.copy()
-X_missing[np.where(missing_samples)[0], missing_features] = 0
-y_missing = y_full.copy()
 
-##########################################
-estimator = Pipeline([("imputer", Imputer(missing_values=0,
-                                          strategy="mean",
-                                          axis=0)),
-                      ("forest", RandomForestRegressor(random_state=0,
-                                                       n_estimators=100))])
-score = cross_val_score(estimator, X_missing, y_missing).mean()
+estimator = Pipeline([("forest", RandomForestClassifier(random_state=0, n_estimators=100))])
+estimator.fit(predictors, outcomes)
+
+predicted = estimator.predict(predictors) 
+prediction_scores  = accuracy_score(outcomes, predicted) #This code will change, fi we cross validate
+
+#test_predicted = estimator.predict(test_predictors) 
+#prediction_scores  = accuracy_score(test_outcomes, test_predicted)
+
+with open(os.path.join(os.getcwd(), 'data','RF.pickle'), 'wb') as pickle_file:
+    pickle.dump(estimator, pickle_file)
+
+max(predictors[0])
+
+
+
 print("Score after imputation of the missing values = %.2f" % score)
+
+
+
