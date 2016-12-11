@@ -23,34 +23,14 @@ In this case, imputing helps the classifier get close to the original score.
   
 """
 import numpy as np
-
+import pandas as pd
 from sklearn.datasets import load_boston
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import Imputer
 from sklearn.model_selection import cross_val_score
 
-rng = np.random.RandomState(0)
-
-dataset = load_boston()
-X_full, y_full = dataset.data, dataset.target
-n_samples = X_full.shape[0]
-n_features = X_full.shape[1]
-
-# Estimate the score on the entire dataset, with no missing values
-estimator = RandomForestRegressor(random_state=0, n_estimators=100)
-score = cross_val_score(estimator, X_full, y_full).mean()
-print("Score with the entire dataset = %.2f" % score)
-
-# Add missing values in 75% of the lines
-missing_rate = 0.75
-n_missing_samples = np.floor(n_samples * missing_rate)
-missing_samples = np.hstack((np.zeros(n_samples - n_missing_samples,
-                                      dtype=np.bool),
-                             np.ones(n_missing_samples,
-                                     dtype=np.bool)))
-rng.shuffle(missing_samples)
-missing_features = rng.randint(0, n_features, n_missing_samples)
+vu_df= pandas.read_pickle('./data/pickle.pickle')
 
 # Estimate the score without the lines containing missing values
 X_filtered = X_full[~missing_samples, :]

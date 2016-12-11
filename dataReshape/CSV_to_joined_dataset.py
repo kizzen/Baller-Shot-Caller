@@ -100,7 +100,7 @@ def pivoted_dataframe(filename):
 ## Execute and merging steps
 ##########################################################################    
 pivoted_df = pivoted_dataframe(filenames) #multiindex filename performance?
-
+a = list(pivoted_df.columns.values)
 
 #   1. Merge with PlayByPlay data by Gameid, Eventid, for outcomes.
 fn = os.path.join(os.getcwd(), 'exports', 'pbp_SAS.csv') #play by play path
@@ -113,11 +113,31 @@ pbp_df = pbp_df[((pbp_df.EVENTMSGTYPE==2) | (pbp_df.EVENTMSGTYPE==1)) & \
                  (pbp_df.PLAYER1_TEAM_ABBREVIATION=='SAS')]
 
 #How to merge on keys that have different names, or even formats (lol tuple)
-merged_df = pd.merge(pbp_df, pivoted_df, how='left', left_on=['GAME_ID', 'EVENTNUM'], \
-                     right_on=[('event_id', '', ''), ('game_id', '', '')])
-merged_df2 = pd.merge(pbp_df, pivoted_df, how='left', left_on=['GAME_ID', 'EVENTNUM'], \
-                      right_on=[('event_id', '', ''), ('game_id', '', '')])
 
+merged_df = pd.merge(pbp_df, pivoted_df, how='left', left_on=['GAME_ID', 'EVENTNUM'], \
+                      right_on=[('game_id', '', ''), ('event_id', '', '')])
+
+merged_df.columns.values
+max(merged_df[('x_loc', 23, 'Tim Duncan')])
+
+merged_df.to_pickle('data\\pickle.pickle')
+
+def imputationcolumns(dataframe):
+    motion_colnames = []
+    for i in dataframe.columns:
+        if isinstance(i, tuple):
+            motion_colnames.append(i)
+    return motion_colnames
+            
+motion_colnames = imputationcolumns(merged_df2)
+
+for i in merged_df2.columns:
+    print(isinstance(i, tuple))
+        
+#Pickle
+
+
+###Just some testing
 merged_df[('y_loc', 1, 'Tony Parker')].count()
 
 #Iterate through x_loc, y_loc class and impute null values
