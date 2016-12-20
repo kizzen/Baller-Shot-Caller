@@ -1,25 +1,9 @@
 """
-======================================================
-Imputing missing values before building an estimator
-======================================================
-
-This example shows that imputing the missing values can give better results
-than discarding the samples containing any missing value.
-Imputing does not always improve the predictions, so please check via cross-validation.
-Sometimes dropping rows or using marker values is more effective.
-
-Missing values can be replaced by the mean, the median or the most frequent
-value using the ``strategy`` hyper-parameter.
-The median is a more robust estimator for data with high magnitude variables
-which could dominate results (otherwise known as a 'long tail').
-
-Script output::
-
-  Score with the entire dataset = 0.56
-  Score without the samples containing missing values = 0.48
-  Score after imputation of the missing values = 0.55
 
 In this case, imputing helps the classifier get close to the original score.
+
+Cross Validation Link:
+http://scikit-learn.org/stable/auto_examples/model_selection/grid_search_digits.html#sphx-glr-auto-examples-model-selection-grid-search-digits-py
   
 """
 
@@ -41,6 +25,7 @@ from sklearn import svm
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import Imputer
 from sklearn.model_selection import cross_val_score
+from sklearn.model_selection import GridSearchCV
 
 
 ##############################
@@ -67,21 +52,26 @@ outcomes = outcomes.astype('category')
 
 
 #need to identify tuples for our columns.
-colnames_pred = []
-for i in df.columns:
-    if isinstance(i, tuple):
-        colnames_pred.append(i)
-colnames_pred = colnames_pred[2:]
+def gen_predictors(df):
+    colnames_pred = []
+    for i in df.columns:
+        if isinstance(i, tuple):
+            colnames_pred.append(i)
+    colnames_pred = colnames_pred[2:]
+            
+    len(colnames_pred)
+    
+    ####Imputing values for players in bench
+    predictors = df[colnames_pred]
+    type(predictors)
+    
+    predictors.fillna(-100, inplace= True)
         
-len(colnames_pred)
-
-####Imputing values for players in bench
-predictors = df[colnames_pred]
-type(predictors)
-
-for i in predictors:
-    predictors[i].fillna(-100, inplace= True)
-
+    return predictors
+    
+predictors = gen_predictors(df)
+df.max()
+df.min()
 type(predictors)
     
 #==============================================================================
@@ -111,20 +101,34 @@ type(predictors)
     
     
 #==============================================================================
-# Model Fitting parameters
+# SVM Model Fitting parameters
 #==============================================================================
 print("Fitting the classifier to the training set")
 t0 = time()
 param_grid = {'C': [1e3, 5e3, 1e4, 5e4, 1e5],
               'gamma': [0.0001, 0.0005, 0.001, 0.005, 0.01, 0.1], }
-clf = GridSearchCV(SVC(kernel='rbf', class_weight='balanced'), param_grid)
-clf = clf.fit(X_train_pca, y_train)
+gs_clf = GridSearchCV(svm.SVC(kernel='rbf', class_weight='balanced'), param_grid)
+gs_clf.fit(predictors, outcomes)
+gs_svm_predicted = clf.predict(predictors)
+
+
+clf = svm.SVC(kernel='rbf', class_weight='balanced')
+clf.fit(predictors, outcomes)
+
+svm_predicted = clf.predict(predictors)
+accuracy_score(outcomes, svm_predicted)
+
+
 print("done in %0.3fs" % (time() - t0))
 print("Best estimator found by grid search:")
 print(clf.best_estimator_)
 
 
 
+    
+#==============================================================================
+# RandomForest (Classifier Variant) Model Fitting parameters
+#==============================================================================
 
 estimator = Pipeline([("forest", RandomForestClassifier(random_state=0, n_estimators=100))])
 estimator.fit(predictors, outcomes)
