@@ -88,14 +88,13 @@ prediction_scores  = accuracy_score(outcomes, predicted) #This code will change,
 #test_predicted = estimator.predict(test_predictors) 
 #prediction_scores  = accuracy_score(test_outcomes, test_predicted)
 
+print(prediction_scores)
+
 with open(os.path.join(os.getcwd(), 'data','RF.pickle'), 'wb') as pickle_file:
     pickle.dump(estimator, pickle_file)
 
-max(predictors[0])
 
 
-
-print("Score after imputation of the missing values = %.2f" % score)
 
 
 
