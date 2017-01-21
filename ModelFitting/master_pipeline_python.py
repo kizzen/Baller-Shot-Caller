@@ -140,7 +140,7 @@ df[('x_loc', 29, 'Boris Diaw')] # just test code to ensure that this shitzle wor
 #==============================================================================
 # RandomForest (Classifier Variant) Model Fitting parameters
 #==============================================================================
-
+  
 estimator = Pipeline([("forest", RandomForestClassifier(random_state=0, n_estimators=100))])
 estimator.fit(predictors2, outcomes)
 
