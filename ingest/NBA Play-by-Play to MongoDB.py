@@ -3,6 +3,7 @@
 # Script to gather play-by-play data for a single season into MongoDB\
 
 # NOTE: My local instance of nba_py has been modified to query the 2015-16 season explicitly
+# Requires data already pulled from JSON.s
 
 
 ##########################################################################
@@ -84,24 +85,3 @@ pbp_db = client['PBP']
 game_id_list = get_games_list(team_abbr)
 playbyplay_to_mongo(game_id_list, pbp_db)
 
-
-##########################################################################
-## Scratch
-##########################################################################
-
-
-# The following is scratch code used in development. It is not used in the actual execution.
-
-'''
-game_id = game_id_list[0]
-game_pbp = pbp_db[game_id]
-cursor = game_pbp.find({})
-for document in cursor:
-    print(document)
-
-
-# PrettyPrint syntax
-pp = pprint.PrettyPrinter(indent=4)
-pp.pprint(document)
-
-'''

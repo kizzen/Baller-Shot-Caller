@@ -80,29 +80,29 @@ def describe_databases(client):
 ## Execution
 ##########################################################################
 
-
+if __name__ == "__main__":
 # Change to target working directory
-os.chdir(data_directory)
-
-
-# Connect to MongoDB and initialize database 'NBA'
-client = pymongo.MongoClient()
-db = client.sportVU
-
-
-# Get list of JSON files in working directory
-json_files = get_json_files()
-
-
-
-# Insert those JSON files into the database
-insert_games(json_files, db)
-
-#in case of need of restart
-
-target_ibdex = json_files.index('0021500323.json')
-restart_json = json_files[target_ibdex:]
-insert_games(restart_json, db)
+    os.chdir(data_directory)
+    
+    
+    # Connect to MongoDB and initialize database 'NBA'
+    client = pymongo.MongoClient()
+    db = client.sportVU
+    
+    
+    # Get list of JSON files in working directory
+    json_files = get_json_files()
+    
+    
+    
+    # Insert those JSON files into the database
+    insert_games(json_files, db)
+    
+    #in case of need of restart
+    
+    target_ibdex = json_files.index('0021500323.json')
+    restart_json = json_files[target_ibdex:]
+    insert_games(restart_json, db)
 
 
 
@@ -111,38 +111,3 @@ insert_games(restart_json, db)
 ## Scratch Code
 ##########################################################################
 
-
-# PrettyPrint syntax
-pp = pprint.PrettyPrinter(indent=4)
-pp.pprint(document)
-
-
-# Find first document in collection
-mycursor = db[game_id].find()
-
-
-# Print single document in collection
-collection.find_one()
-db[game_id].find_one()
-
-
-# Print documents in collection (WARNING: THIS CRASHES PYTHON CONSOLE FOR ENTIRE GAME DATA)
-cursor = collection.find({})
-for document in cursor:
-    pp.pprint(document)
-
-
-# Print event IDs in collection
-collection.distinct('eventId')
-
-
-# Print number of documents in collection
-collection.count()
-
-
-# Drop database NBA
-client.drop_database('NBA')
-
-
-# sudo service mongod start --dbpath /media/kurt/sd/MongoDB/db
-# sudo mongod --dbpath /media/kurt/sd/MongoDB/db
