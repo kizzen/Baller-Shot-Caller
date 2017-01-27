@@ -133,14 +133,10 @@ def get_team_stats(all_teams_list):
 ## Execution
 ##########################################################################
 
+	
+if __name__ == "__main__":
+    get_team_players(all_teams_list)
 
-get_team_players(all_teams_list)
+    get_team_stats(all_teams_list)
 
-get_team_stats(all_teams_list)
-
-get_player_attributes(all_teams_list)
-
-
-##########################################################################
-## Scratch
-##########################################################################
+    get_player_attributes(all_teams_list)

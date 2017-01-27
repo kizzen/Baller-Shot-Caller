@@ -17,7 +17,7 @@ collection = db.PbP_Full
 
 
 #%%#######################################################################
-## Import of JSONS into mongo; not necessary to run if you already have my mongo database itself
+## Import of JSONS into mongo; not necessary to run if you already have mongo database already generated locally
 ##########################################################################
 
 

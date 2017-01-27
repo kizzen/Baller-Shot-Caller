@@ -79,9 +79,10 @@ def describe_collections(db):
 ##########################################################################
 
 
-client = MongoClient()
-pbp_db = client['PBP']
+if __name__ == "__main__":
+    client = MongoClient()
+    pbp_db = client['PBP']
 
-game_id_list = get_games_list(team_abbr)
-playbyplay_to_mongo(game_id_list, pbp_db)
+    game_id_list = get_games_list(team_abbr)
+    playbyplay_to_mongo(game_id_list, pbp_db)
 
