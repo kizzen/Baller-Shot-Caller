@@ -1,12 +1,15 @@
 import csv
-import pandas as pd
-import pickle
 import numpy as np
-import matplotlib.pyplot as plt
-import matplotlib.cm as cm
+import pickle
 import random
 
+# 3rd party
+import pandas as pd
+import matplotlib.pyplot as plt
+import matplotlib.cm as cm
+
 import seaborn as sns
+
 sns.set_color_codes()
 sns.set_style("white")
 

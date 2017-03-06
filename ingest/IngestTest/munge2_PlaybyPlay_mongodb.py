@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 import json
-import pymongo
-from pprint import pprint
 import csv
 import glob
 import os
 import sys
+
+# 3rd party
+import pymongo
+from pprint import pprint
 #%%#######################################################################
 ## establishing mongo connection, only after you get mongod.exe is running 
 # C:\Program Files\MongoDB\Server\3.2\bin

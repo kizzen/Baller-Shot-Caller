@@ -17,4 +17,16 @@ Code from ingest with populate this folder with our json and csvs generated may 
 
 /ModelFitting contains a class in which to run several families of models
 
-/VisualGame contains the python notebook needed to run 'ShotColla', the predictive game. 
+/VisualGame contains the python notebook needed to run 'ShotColla', the predictive game.
+___
+
+```
+# To run environment setup script:
+$ sh initenv.sh
+
+# To activate virtualenv:
+$ source .venv/bin/activate
+
+# To deactivate:
+$ deactivate
+```

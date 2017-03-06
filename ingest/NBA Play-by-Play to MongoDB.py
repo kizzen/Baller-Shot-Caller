@@ -10,15 +10,15 @@
 ## Imports
 ##########################################################################
 
-
 import json
+
+# 3rd party
 from nba_py.constants import TEAMS
 from nba_py import game
 from nba_py import team
 from nba_py import player
 import pandas as pd
 from pymongo import MongoClient
-
 
 ##########################################################################
 ## Module Variables/Constants

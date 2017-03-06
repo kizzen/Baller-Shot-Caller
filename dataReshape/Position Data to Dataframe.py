@@ -10,11 +10,13 @@
 ##########################################################################
 
 import json
+import numpy as np
+import os
+
+# 3rd party
+from pymongo import MongoClient
 import pprint
 import pandas as pd
-import numpy as np
-from pymongo import MongoClient
-import os
 
 ##########################################################################
 ## Module Variables/Constants

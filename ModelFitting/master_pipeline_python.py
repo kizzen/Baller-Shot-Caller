@@ -11,11 +11,12 @@ http://scikit-learn.org/stable/auto_examples/model_selection/grid_search_digits.
 ##############################
 # Module imports and dependencies
 ##############################
-import numpy as np
-import pandas as pd
 import pickle
 import os
 
+# 3rd party
+import numpy as np
+import pandas as pd
 from sklearn.metrics import accuracy_score
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.ensemble import RandomForestClassifier
@@ -25,7 +26,6 @@ from sklearn.pipeline import Pipeline
 from sklearn.model_selection import cross_val_score
 from sklearn.model_selection import GridSearchCV
 from sklearn.model_selection import train_test_split
-
 
 ##############################
 # Data munging support functions and initial import of files

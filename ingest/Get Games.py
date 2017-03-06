@@ -1,7 +1,9 @@
-from bs4 import BeautifulSoup
-import requests
 import urllib
 import os
+
+# 3rd party
+from bs4 import BeautifulSoup
+import requests
 
 # URL for BasketballData repository snapshot as of 1/24/16
 url = 'https://github.com/neilmj/BasketballData/tree/b46f92a9438df7661ddce203ed10625c1c4e586a/2016.NBA.Raw.SportVU.Game.Logs'

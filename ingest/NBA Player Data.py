@@ -7,7 +7,7 @@
 ## Imports
 ##########################################################################
 
-
+# 3rd party
 from nba_py.constants import TEAMS
 from nba_py import team
 from nba_py import player

@@ -11,10 +11,12 @@ http://scikit-learn.org/stable/auto_examples/model_selection/grid_search_digits.
 # Module imports and dependencies
 ##############################
 
-import numpy as np
-import pandas as pd
 import pickle
 import os
+
+# 3rd party
+import numpy as np
+import pandas as pd
 import sklearn
 
 from sklearn.metrics import accuracy_score

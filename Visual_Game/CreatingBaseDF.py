@@ -1,7 +1,9 @@
 import numpy as np
-import pandas as pd
 import pickle
 import os
+
+# 3rd party
+import pandas as pd
 import sklearn
 
 from sklearn.metrics import accuracy_score
