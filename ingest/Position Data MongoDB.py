@@ -4,14 +4,14 @@
 ## Imports
 ##########################################################################
 
-
 import os
 import glob
 import json
+
+# 3rd party
 import pymongo
 from pymongo import MongoClient
 import pprint
-
 
 ##########################################################################
 ## Module Variables/Constants

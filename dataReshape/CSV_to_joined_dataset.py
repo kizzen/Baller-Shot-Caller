@@ -8,11 +8,14 @@
 ##########################################################################
 ## Imports
 ##########################################################################
-import pprint
-import pandas as pd
+
 import numpy as np
 import os
 import glob
+
+# 3rd party
+import pprint
+import pandas as pd
 
 ##########################################################################
 ## Initial file parameters setup and initialization.

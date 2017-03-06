@@ -1,7 +1,9 @@
 # import modules
 import csv
-import pandas as pd
 import pickle
+
+# 3rd party
+import pandas as pd
 
 # make sure to include the correct file path
 dfbis = pd.read_csv('/Users/khalilezzine/Desktop/DS/Visual_Game/df_w_predicted.csv')
