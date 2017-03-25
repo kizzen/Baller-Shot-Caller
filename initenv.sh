@@ -4,6 +4,7 @@ rm -rf .venv
 virtualenv -p python3 .venv
 source .venv/bin/activate
 pip3 install bs4
+pip3 install jupyter
 pip3 install matplotlib
 pip3 install nba_py
 pip3 install numpy

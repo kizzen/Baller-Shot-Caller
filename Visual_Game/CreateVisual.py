@@ -13,7 +13,7 @@ import seaborn as sns
 sns.set_color_codes()
 sns.set_style("white")
 
-dfvisual = pd.read_csv('/Users/khalilezzine/Desktop/DS/Visual_Game/df4plot1.csv')
+dfvisual = pd.read_csv('/Users/awei/Documents/Baller-Shot-Caller/Visual_Game/df4plot1.csv')
 
 rnd = random.randint(0,len(dfvisual.index)-1)
 
@@ -194,12 +194,12 @@ dfTP = pd.DataFrame([TPlstname, TPlstxv, TPlstyv]).T
 
 """Creating DataFrame for visual"""
 df_plt = pd.concat([dfDG, dfTD, dfKL,dfLA,dfTP], axis=1)
-df_plt.to_csv('/Users/khalilezzine/Desktop/DS/Visual_Game/df4plot2.csv')
+df_plt.to_csv('/Users/awei/Documents/Baller-Shot-Caller/Visual_Game/df4plot2.csv')
 
 """Creating Plot"""
 DGx,DGy, TDx, TDy, KLx, KLy, LAx, LAy,TPx,TPy=np.loadtxt('/Users/khalilezzine/Desktop/DS/Visual_Game/df4plot2.csv',unpack=True,
                 delimiter=',',skiprows=1,usecols=(2,3,5,6,8,9,11,12,14,15))
-court=plt.imread("/Users/khalilezzine/Desktop/DS/Visual_Game/fullcourt.png")
+court=plt.imread("/Users/awei/Documents/Baller-Shot-Caller/Visual_Game/fullcourt.png")
 plt.figure(figsize=(15,11.5))
 
 plt.imshow(court, zorder=0, extent=[0,94,50,0])

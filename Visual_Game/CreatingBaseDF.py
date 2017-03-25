@@ -25,7 +25,7 @@ from sklearn.model_selection import GridSearchCV
 
 
 #dir = os.path.dirname(__file__) #dirname'
-os.chdir('/Users/khalilezzine/Desktop/DS/')
+os.chdir('/Users/awei/Documents/Baller-Shot-Caller/Data')
 filename = os.path.join(os.getcwd(), 'Visual_Game','pickle.pickle')
 #
 df= pd.read_pickle(filename)
@@ -166,7 +166,7 @@ df_predicted.columns = ['Predicted']
 # df_predicted.to_csv('/Users/khalilezzine/Desktop/what.csv')
 # print (df_predicted.shape)
 df_readywr = pd.concat([df_predicted, df], axis=1)
-df_readywr.to_csv('/Users/khalilezzine/Desktop/df_w_predicted.csv')
+df_readywr.to_csv('/Users/awei/Documents/Baller-Shot-Caller/Visual_Game/df_w_predicted.csv')
 
 # for i in lst_predicted:
 #         if i == 'Kawhi Leonard':
