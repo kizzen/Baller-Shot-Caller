@@ -77,8 +77,27 @@ def describe_databases(client):
 
 
 ##########################################################################
-## Execution
+## Functionfor Execution
 ##########################################################################
+def mongoData():
+    client = pymongo.MongoClient()
+    db = client.sportVU
+    
+    
+    # Get list of JSON files in working directory
+    json_files = get_json_files()
+    
+    
+    
+    # Insert those JSON files into the database
+    insert_games(json_files, db)
+    
+    #in case of need of restart
+    
+    target_ibdex = json_files.index('0021500323.json')
+    restart_json = json_files[target_ibdex:]
+    insert_games(restart_json, db)
+
 
 if __name__ == "__main__":
 # Change to target working directory
