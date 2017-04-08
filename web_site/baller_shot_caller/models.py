@@ -18,6 +18,3 @@ class User(models.Model):
 class Score(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     points = models.IntegerField(default=0)
-
-    def __str__(self):
-        return self.points
