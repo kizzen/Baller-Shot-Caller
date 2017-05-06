@@ -6,7 +6,7 @@ import pickle
 import pandas as pd
 
 # make sure to include the correct file path
-dfbis = pd.read_csv('/Users/khalilezzine/Desktop/DS/Visual_Game/df_w_predicted.csv')
+dfbis = pd.read_csv('/Users/awei/documents/workspace/Baller-Shot-Caller/Visual_Game/df_w_predicted.csv')
 
 #'Predicted' is model prediction, 'PLAYER1_NAME' is who actually took the shot
 dfbis1 = dfbis[['Predicted', 'PLAYER1_NAME']]
@@ -15,7 +15,7 @@ dfbis1 = dfbis[['Predicted', 'PLAYER1_NAME']]
 following players: Danny Green, Kawhi Leonard, LaMarcus Aldridge, Tim Duncan and
 Tony Parker.'''
 
-ddfbis=pd.read_pickle('/Users/khalilezzine/Desktop/DS/Visual_Game/pickle.pickle')
+ddfbis=pd.read_pickle('/Users/awei/documents/workspace/Baller-Shot-Caller/Data/pickle.pickle')
 dfbis2 = ddfbis.iloc[:,35:]#selecting only columns with x,y coordinated
 
 # drop column if it does not contain one the these 5 players
@@ -39,4 +39,4 @@ final_dbis.dropna(how='any',inplace=True) # drop play if player is on the bench
 final_dbis.reset_index(inplace=True)
 del final_dbis['index']
 
-final_dbis.to_csv('/Users/khalilezzine/Desktop/DS/Visual_Game/df4plot1.csv')
+final_dbis.to_csv('/Users/awei/documents/workspace/Baller-Shot-Caller/Visual_Game/df4plot1.csv')
