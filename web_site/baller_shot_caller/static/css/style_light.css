@@ -684,7 +684,7 @@ ul.extra-features i {
 /* Video Section */
 
 .video {
-    background-image: url(../images/video_bg.jpg);
+    /*background-image: url(../images/video_bg.jpg);*/
     background-attachment: fixed;
     -webkit-background-size: cover;
             background-size: cover;
