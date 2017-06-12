@@ -3,6 +3,7 @@ pip3 install virtualenv
 rm -rf .venv
 virtualenv -p python3 .venv
 source .venv/bin/activate
+pip3 install awsebcli
 pip3 install bs4
 pip3 install django
 pip3 install jupyter

@@ -17,6 +17,6 @@ from django.conf.urls import include, url
 from django.contrib import admin
 
 urlpatterns = [
-    url(r'^baller_shot_caller/', include('baller_shot_caller.urls')),
+    url(r'^', include('baller_shot_caller.urls')),
     url(r'^admin/', admin.site.urls),
 ]
