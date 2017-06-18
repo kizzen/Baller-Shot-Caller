@@ -47,20 +47,16 @@ def get_player_attributes(all_teams_list):
         players_json = team.TeamPlayers(team_id=current_team['id']).json
         player_data_list = players_json['resultSets'][1]
         for player_data in player_data_list['rowSet']:
-
             player_id = player_data[1]
             player_ids.append(player_id)
 
     player_summary_list = []
 
     for player_id in player_ids:
-
         player_summary_json = player.PlayerSummary(player_id).json
         player_info = player_summary_json['resultSets'][0]
-
         player_headers = player_info['headers']
         player_stats = player_info['rowSet'][0]
-
         player_summary_dict = dict(zip(player_headers, player_stats))
         player_summary_list.append(player_summary_dict)
 
@@ -102,24 +98,17 @@ def get_team_players(all_teams_list):
 
 
 def get_team_stats(all_teams_list):
-
+    
     team_overall_list = []
 
     for team_abbr in all_teams_list:
-
         current_team = TEAMS[team_abbr]
-
         print('Gathering overall data for {}'.format(current_team['name']))
-
         players_json = team.TeamPlayers(team_id=current_team['id']).json
-
         team_stats = players_json['resultSets'][0]
-
         team_overall_headers = team_stats['headers']
         team_overall_stats = team_stats['rowSet'][0]
-
         team_overall_dict = dict(zip(team_overall_headers, team_overall_stats))
-
         team_overall_list.append(team_overall_dict)
 
     df = pd.DataFrame(team_overall_list)

@@ -25,7 +25,6 @@ from pymongo import MongoClient
 ##########################################################################
 
 # We want the Spurs.
-team_abbr = 'SAS'
 
 ##########################################################################
 ## Functions
@@ -37,7 +36,7 @@ def printJSON(your_json):
 '''
 
 # Get list of game IDs for single team
-def get_games_list(team_abbr):
+def get_games_list(team_abbr='SAS'):
 
     gamelogs = team.TeamGameLogs(team_id=TEAMS[team_abbr]['id']).json
 
@@ -78,6 +77,12 @@ def describe_collections(db):
 ## Execution
 ##########################################################################
 
+def pbp_toMongo():
+    client = MongoClient()
+    pbp_db = client['PBP']
+
+    game_id_list = get_games_list(team_abbr)
+    playbyplay_to_mongo(game_id_list, pbp_db)
 
 if __name__ == "__main__":
     client = MongoClient()
