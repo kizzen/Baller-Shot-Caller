@@ -1,8 +1,10 @@
 # Baller Shot Caller
 
-Baller Shot Caller is an interactive web-app where you try to predict shot outcomes using visualizations of NBA plays: http://www.ballershotcaller.net/. You play against the computer and try and guess who shot the ball. Each player is represented by a color; their runs start where the colors are lightest, and the play ends (i.e. a shot was taken) when the colors are darkest. Simply select who you think shot the ball, and click on "submit" to find out if you were correct. 
+Baller Shot Caller is an interactive web-app where you try to predict shot outcomes using visualizations of NBA plays: http://www.ballershotcaller.net/. You play against the computer and try and guess who shot the ball. Each player is represented by a color; their runs start where the colors are lightest, and the play ends (i.e. a shot was taken) when the colors are darkest. Simply select who you think shot the ball, and click on "submit" to find out if you were correct.
 
+To run the app locally, the Docker container ID is dc53a36ba760 and the Docker image is bsc.
 
+![alt text]( https://raw.githubusercontent.com/kizzen/Baller-Shot-Caller/master/visual_game/bsc_capture.png) 
 
 # nba-tracking
 Georgetown Data Science NBA Player Tracking Project
