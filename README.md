@@ -1,3 +1,9 @@
+# Baller Shot Caller
+
+Baller Shot Caller is an interactive web-app where you try to predict shot outcomes using visualizations of NBA plays: http://www.ballershotcaller.net/. You play against the computer and try and guess who shot the ball. Each player is represented by a color; their runs start where the colors are lightest, and the play ends (i.e. a shot was taken) when the colors are darkest. Simply select who you think shot the ball, and click on "submit" to find out if you were correct. 
+
+
+
 # nba-tracking
 Georgetown Data Science NBA Player Tracking Project
 
@@ -17,7 +23,7 @@ Code from ingest with populate this folder with our json and csvs generated may 
 
 /ModelFitting contains a class in which to run several families of models
 
-/VisualGame contains the python notebook needed to run 'ShotColla', the predictive game.
+
 ___
 
 ```
