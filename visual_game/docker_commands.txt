@@ -1,2 +1,0 @@
-docker build -t bsc:latest . 
-docker run -it -p 80:80 bsc
