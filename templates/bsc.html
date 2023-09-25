@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BallerShotCaller</title>
+
+<link rel="stylesheet" href="./static/style/custom/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="./static/loading/loading.css"/>
+<link rel="stylesheet" type="text/css" href="./static/loading/loading-btn.css"/>
+
+
+<link href = "/bootstrap/css/bootstrap.min.css" rel = "stylesheet">
+<script src = "/scripts/jquery.min.js"></script>
+<script src = "/bootstrap/js/bootstrap.min.js"></script>
+</style>
+</head>
+
+
+<body>
+
+<!--     <center>   
+     <h6><strong>Want to know how I built this tool?</strong> Check out this <a href='https://medium.com/@ezzine.khalil' target='_blank'><u>blog post</u></a>.</h6>
+     <hr> -->
+<div>
+  <center>
+  <h1>Baller Shot Caller</h1>
+  <h3>Shot predictions derived from NBA motion data</h3><br><br>
+  </center>
+
+  <center>
+  <form  action="/bsc" method="POST" >
+  <button class="btn btn-danger ld-over-inverse" type="submit"
+       onclick="this.classList.add('running');">New Play
+    <div class="ld">
+      <div class="ld ld-ball ld-bounce"></div>
+</div> </button>
+</form></center>
+</div>
+<br><br>
+<div>
+     <center>
+<!--       <img src="./static/bsc_play.png" class="img-responsive" alt = "Online Training" width="500" height="333">
+      <img src="./static/bsc_play.png" class="img-responsive" alt = "Online Training" width="250" height="150"> -->
+            <img src="static/bsc_plots/bsc_play.png" width="587.5" height="312.5">
+      <img src="static/bsc_data/bsc_legend.png" width="200" height="200">
+   </center>
+
+<br>
+<center>
+      <form  action="/bscsubmit" method="POST" >
+      <label for="shooter"><font size="+1">Who shot the ball? &nbsp;</font></label>
+     <select name="shooter" style="width: 100px">
+       <option value="null"> </option>
+       <option value="Danny Green">Danny Green</option>
+       <option value="Tim Duncan">Tim Duncan</option>
+       <option value="Kawhi Leonard">Kawhi Leonard</option>
+       <option value="LaMarcus Aldridge">LaMarcus Aldridge</option>
+       <option value="Tony Parker">Tony Parker</option>
+     </select>&nbsp; &nbsp; &nbsp; &nbsp; 
+
+     <button class="btn btn-primary ld-over-inverse" type="submit"
+       onclick="this.classList.add('running');">Submit
+    <div class="ld">
+      <div class="ld ld-pie ld-heartbeat"></div>
+    </div> </button>
+
+<br><br><br><br>
+<br>
+</div>
+    
+</form></div></center></body></html>
+   
