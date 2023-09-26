@@ -2,7 +2,7 @@
 
 A web-app game that lets users visually examine the play dynamics of an NBA game—focusing on the Spurs. Observe the play until the moment the ball is shot, without seeing the ball itself. Challenge the model and try to determine who took the shot.
 
-![Play the Game](https://github.com/kizzen/Baller-Shot-Caller/issues/41#issue-1913725848)
+![bsc_screenshot](https://github.com/kizzen/Baller-Shot-Caller/assets/19916076/acf1f24f-6ad4-43ce-ade1-63473f0e4006)
 
 To see the app in action: https://www.youtube.com/watch?v=p69Cib-ZyK0
 
